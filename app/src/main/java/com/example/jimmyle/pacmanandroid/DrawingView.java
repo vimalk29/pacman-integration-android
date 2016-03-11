@@ -224,6 +224,7 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
     public void movePacman(Canvas canvas) {
         short ch;
 
+        // This was based on the non-Android Pacman legacy project for CS56
         // Check if xPos and yPos of pacman is both a multiple of block size
         if ( (xPosPacman % blockSize == 0) && (yPosPacman  % blockSize == 0) ) {
 
@@ -301,6 +302,7 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
 
     }
 
+    // This was based on the non-Android Pacman legacy project for CS56
     // Method that draws pacman based on his viewDirection
     public void drawPacman(Canvas canvas) {
         switch (viewDirection) {
@@ -334,7 +336,7 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         }
     }
 
-    // Method to draw map layout
+    // Method to draw map layout that is based on the non-Android Pacman legacy project for CS56
     public void drawMap(Canvas canvas) {
         paint.setColor(Color.BLUE);
         paint.setStrokeWidth(2.5f);
@@ -598,6 +600,7 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
                 getResources(), R.drawable.ghost), spriteSize, spriteSize, false);
     }
 
+    // This method of drawing the map and pellets was taken from the non-Android PacMan legacy project for CS56.
     final short leveldata1[][] = new short[][]{
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
