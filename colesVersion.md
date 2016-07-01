@@ -25,8 +25,8 @@ J. The current code does not make use of Test cases written by the previous stud
 
 E. The current Readme provides a brief discription of the project and the authors of the game. There is a section about how to run the current code using android studio on  either an emulator or on an android device. The previous students provide the current features of the game as well as the implemented and remaining User Stories. Lastly they provide a final remarks section where they explain areas to improve and possible features to implement in the game as well as a project history.
 
-F. Since this is an android project there is not an included build.xml file and 
-G.
+F. Since this is an android project there is not an included build.xml file because this project runs through Android Studio. A similiar file exists tilted AndroidManifest.xml which is in the app/src/main/ directory.
+G. 
   Current Issues
 
   add more levels - 200 per level
