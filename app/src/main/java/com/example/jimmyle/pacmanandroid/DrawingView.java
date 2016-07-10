@@ -45,6 +45,11 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
     private int currentScore = 0;           //Current game score
     final Handler handler = new Handler();
 
+    //Added Variables by Cole
+    private int numOfPellets = 0;           //Total number of pellets remaining
+    private final short leveldata1[][];
+    private LevelGenerator levelGenerator;
+
     public DrawingView(Context context) {
         super(context);
         holder = getHolder();
@@ -62,6 +67,15 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         xPosPacman = 8 * blockSize;
         yPosPacman = 13 * blockSize;
 
+        //Created LevelGenerator class to build levels
+        levelGenerator = new LevelGenerator();
+
+        //Default level, builds what the W16 students had
+        //leveldata1 = levelGenerator.getLevelData();
+
+        //Test level, builds a map with only one pellet
+        leveldata1 = levelGenerator.getTestMap();
+
         loadBitmapImages();
         Log.i("info", "Constructor");
     }
@@ -69,6 +83,7 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
     @Override
     public void run() {
         Log.i("info", "Run");
+        countPellets();
         while (canDraw) {
             if (!holder.getSurface().isValid()) {
                 continue;
@@ -243,6 +258,18 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
                 // Toggle pellet so it won't be drawn anymore
                 leveldata1[yPosPacman / blockSize][xPosPacman / blockSize] = (short) (ch ^ 16);
                 currentScore += 10;
+
+                //decreases the total number of pellets
+                numOfPellets--;
+                //All of the pellets have been eaten then the game ends
+                if (numOfPellets == 0){
+                    Log.i("info", "GameOver");
+
+                    Intent completedIntent = new Intent(getContext(), CompletedLevelActivity.class);
+                    getContext().startActivity(completedIntent);
+
+                }
+
             }
 
             // Checks for direction buffering
@@ -330,11 +357,17 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
                 x = j * blockSize;
                 y = i * blockSize;
                 // Draws pellet in the middle of a block
-                if ((leveldata1[i][j] & 16) != 0)
+                if ((leveldata1[i][j] & 16) != 0) {
                     canvas.drawCircle(x + blockSize / 2, y + blockSize / 2, blockSize / 10, paint);
+
+                }
             }
         }
     }
+
+
+    //compares the leveldata[][] coords to wall values in order to determine which walls need to be drawn
+    //uses bitwise comparison where wall numbers are: 1->left, 2->top, 4->right, 8->bottom
 
     // Method to draw map layout that is based on the non-Android Pacman legacy project for CS56
     public void drawMap(Canvas canvas) {
@@ -600,25 +633,70 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
                 getResources(), R.drawable.ghost), spriteSize, spriteSize, false);
     }
 
+
+    /*
+    These numbers make up the maze. They provide information out of which we create the corners and the points.
+    Number 1 is a left corner. Numbers 2, 4 and 8 represent top, right, bottom corners respectively.
+    Number 16 is a point. These number can be added, for example number 19 in the upper left corner
+    means that the square will have top and left borders and a point (16 + 2 + 1).
+    */
+
     // This method of drawing the map and pellets was taken from the non-Android PacMan legacy project for CS56.
-    final short leveldata1[][] = new short[][]{
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            {19, 26, 26, 18, 26, 26, 26, 22, 0, 19, 26, 26, 26, 18, 26, 26, 22},
-            {21, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 21},
-            {17, 26, 26, 16, 26, 18, 26, 24, 26, 24, 26, 18, 26, 16, 26, 26, 20},
-            {25, 26, 26, 20, 0, 25, 26, 22, 0, 19, 26, 28, 0, 17, 26, 26, 28},
-            {0, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 0},
-            {0, 0, 0, 21, 0, 19, 26, 24, 26, 24, 26, 22, 0, 21, 0, 0, 0},
-            {26, 26, 26, 16, 26, 20, 0, 0, 0, 0, 0, 17, 26, 16, 26, 26, 26},
-            {0, 0, 0, 21, 0, 17, 26, 26, 26, 26, 26, 20, 0, 21, 0, 0, 0},
-            {0, 0, 0, 21, 0, 21, 0, 0, 0, 0, 0, 21, 0, 21, 0, 0, 0},
-            {19, 26, 26, 16, 26, 24, 26, 22, 0, 19, 26, 24, 26, 16, 26, 26, 22},
-            {21, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 21},
-            {25, 22, 0, 21, 0, 0, 0, 17, 2, 20, 0, 0, 0, 21, 0, 19, 28}, // "2" in this line is for
-            {0, 21, 0, 17, 26, 26, 18, 24, 24, 24, 18, 26, 26, 20, 0, 21, 0}, // pacman's spawn
-            {19, 24, 26, 28, 0, 0, 25, 18, 26, 18, 28, 0, 0, 25, 26, 24, 22},
-            {21, 0, 0, 0, 0, 0, 0, 21, 0, 21, 0, 0, 0, 0, 0, 0, 21},
-            {25, 26, 26, 26, 26, 26, 26, 24, 26, 24, 26, 26, 26, 26, 26, 26, 28},
-    };
+//    final short leveldata1[][] = new short[][]{
+//            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//            {19, 26, 26, 18, 26, 26, 26, 22, 0, 19, 26, 26, 26, 18, 26, 26, 22},
+//            {21, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 21},
+//            {17, 26, 26, 16, 26, 18, 26, 24, 26, 24, 26, 18, 26, 16, 26, 26, 20},
+//            {25, 26, 26, 20, 0, 25, 26, 22, 0, 19, 26, 28, 0, 17, 26, 26, 28},
+//            {0, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 0},
+//            {0, 0, 0, 21, 0, 19, 26, 24, 26, 24, 26, 22, 0, 21, 0, 0, 0},
+//            {26, 26, 26, 16, 26, 20, 0, 0, 0, 0, 0, 17, 26, 16, 26, 26, 26},
+//            {0, 0, 0, 21, 0, 17, 26, 26, 26, 26, 26, 20, 0, 21, 0, 0, 0},
+//            {0, 0, 0, 21, 0, 21, 0, 0, 0, 0, 0, 21, 0, 21, 0, 0, 0},
+//            {19, 26, 26, 16, 26, 24, 26, 22, 0, 19, 26, 24, 26, 16, 26, 26, 22},
+//            {21, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 21},
+//            {25, 22, 0, 21, 0, 0, 0, 17, 2, 20, 0, 0, 0, 21, 0, 19, 28}, // "2" in this line is for
+//            {0, 21, 0, 17, 26, 26, 18, 24, 24, 24, 18, 26, 26, 20, 0, 21, 0}, // pacman's spawn
+//            {19, 24, 26, 28, 0, 0, 25, 18, 26, 18, 28, 0, 0, 25, 26, 24, 22},
+//            {21, 0, 0, 0, 0, 0, 0, 21, 0, 21, 0, 0, 0, 0, 0, 0, 21},
+//            {25, 26, 26, 26, 26, 26, 26, 24, 26, 24, 26, 26, 26, 26, 26, 26, 28},
+//    };
+
+    //testing map with one pellet
+//    final short leveldata1[][] = new short[][]{
+//            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+//            {3, 10, 10, 3, 10, 10, 10, 6, 0,3, 10,10,10,3,10,10, 6},
+//            {5, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0, 0, 0, 5, 0, 0, 5},
+//            {1,10,10, 0,10,3,10, 8,10, 8,10,3,10, 0,10,10, 4},
+//            {9,10,10, 4, 0, 9,10, 6, 0,3,10, 12, 0, 1,10,10, 12},
+//            {0, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0, 0, 0, 5, 0, 0, 0},
+//            {0, 0, 0, 5, 0,3,10, 8,10, 8,10, 6, 0, 5, 0, 0, 0},
+//            {10,10,10, 0,10, 4, 0, 0, 0, 0, 0, 1,10, 0,10,10,10},
+//            {0, 0, 0, 5, 0, 1,10,10,10,10,10, 4, 0, 5, 0, 0, 0},
+//            {0, 0, 0, 5, 0, 5, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 0},
+//            {3,10,10, 0,10, 8,10, 6, 0,3,10, 8,10, 0,10,10, 6},
+//            {5, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0, 0, 0, 5, 0, 0, 5},
+//            {9, 6, 0, 5, 0, 0, 0, 1, 2, 20, 0, 0, 0, 5, 0,3, 12}, // "2" in this line is for
+//            {0, 5, 0, 1,10,10,3, 8, 8, 8,3,10,10, 4, 0, 5, 0}, // pacman's spawn
+//            {3, 8,10, 12, 0, 0, 9,3,10,3, 12, 0, 0, 9, 10, 8, 6},
+//            {5, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 5},
+//            {9,10,10,10,10,10,10, 8,10, 8,10,10,10,10,10,10, 12},
+//    };
+
+    //counts the number of pellets at the start of the game
+    private void countPellets() {
+        numOfPellets = 0;
+        for (int i = 0; i < 18; i++) {
+            for (int j = 0; j < 17; j++) {
+                if ((leveldata1[i][j] & 16) != 0) {
+                    //increases the total number of pellets
+                    numOfPellets++;
+
+                    Log.i("info", "Pellets = " + Integer.toString(numOfPellets));
+                }
+            }
+        }
+    }
 }
