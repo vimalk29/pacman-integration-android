@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="@color/material_blue_grey_900">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:textSize="30sp"
+        android:text="@string/settingsTitle"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/yellow"
+        android:textStyle="bold"/>
+
+    <Switch
+        android:layout_width="155dp"
+        android:layout_height="wrap_content"
+        android:text="@string/settingsMusic"
+        android:textSize="30dp"
+        android:id="@+id/switch1"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:layout_weight="0.09" />
+
+
+</LinearLayout>
