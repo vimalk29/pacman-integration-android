@@ -48,6 +48,13 @@
             android:text="@string/settingsLabel"
             android:onClick="showSettingsScreen"
             android:layout_marginBottom="5dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toggleMusic"
+            android:text="@string/musicToggle"/>
+
     </LinearLayout>
 
 </RelativeLayout>

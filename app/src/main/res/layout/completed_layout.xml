@@ -41,6 +41,12 @@
             android:onClick="showHelpScreen"
             android:text="@string/help" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toggleMusic"
+            android:text="@string/musicToggle"/>
+
     </LinearLayout>
 
     <TextView

@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    android:background="@color/material_blue_grey_900">
+    android:background="@color/material_blue_grey_900"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.jimmyle.pacmanandroid.SettingsActivity">
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,15 +20,28 @@
         android:textColor="@color/yellow"
         android:textStyle="bold"/>
 
-    <Switch
-        android:layout_width="155dp"
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/settingsMusic"
-        android:textSize="30dp"
-        android:id="@+id/switch1"
+        android:text="@string/musicToggle"
+        android:textSize="20dp"
+        android:id="@+id/button1"
         android:layout_gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:layout_weight="0.09"
+        android:onClick="playMusic"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/difficulty"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
-        android:layout_weight="0.09" />
+        android:textSize="20dp"/>
+
+
 
 
 </LinearLayout>

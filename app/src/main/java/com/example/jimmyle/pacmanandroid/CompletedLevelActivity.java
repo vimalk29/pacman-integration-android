@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import java.io.IOException;
 
 /**
  * Created by colerogers on 7/9/16.
@@ -33,6 +36,22 @@ public class CompletedLevelActivity extends Activity {
         startActivity(playIntent);
         PlayActivity.getInstance().finish();
         this.finish();
+    }
+
+    private static final String TAG = "SettingsActivity";
+    public void playMusic(View view){
+        if(MainActivity.getPlayer().isPlaying()){ MainActivity.getPlayer().stop(); }
+        else{
+            try {
+                MainActivity.getPlayer().prepare();
+            }
+            catch(IOException ex){
+                Log.d(TAG,"Prepare failed");
+            }
+            finally {
+                MainActivity.getPlayer().start();
+            }
+        }
     }
 
 }
