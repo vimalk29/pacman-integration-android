@@ -20,4 +20,6 @@
     <string name="resumeLabel">Resume</string>
     <string name="wonGame">YOU WON!</string>
     <string name="keepPlaying">Press NEW GAME to play again</string>
+    <string name="gameOver">GAME OVER!</string>
+    <string name="ok">Ok</string>
 </resources>

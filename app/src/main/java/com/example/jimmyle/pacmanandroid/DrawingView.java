@@ -59,12 +59,26 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         paint.setColor(Color.WHITE);
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         screenWidth = metrics.widthPixels;
+
+        //takes screen width of device and creates 17 equal block sizes in length x-dir
         blockSize = screenWidth/17;
         blockSize = (blockSize / 5) * 5;
+
+        //Ghost is at 8 position of length in the array x-dir
+        //leveldata[8,y]
         xPosGhost = 8 * blockSize;
         ghostDirection = 4;
+
+        //Ghost is at 4 position of height in the array y-dir
+        //leveldata[x,4]
         yPosGhost = 4 * blockSize;
+
+        //Pacman is at the 8 position of length in the array x-dir
+        //leveldata[8,y]
         xPosPacman = 8 * blockSize;
+
+        //Pacman is at the 13 position of height in the array y-dir
+        //leveldata[x,13]
         yPosPacman = 13 * blockSize;
 
         //Created LevelGenerator class to build levels
@@ -102,14 +116,30 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
                 // Moves the pacman based on his direction
                 movePacman(canvas);
 
+                //check for player death
+                checkForPlayerDeath();
+
                 // Draw the pellets
                 drawPellets(canvas);
 
                 //Update current and high scores
                 updateScores(canvas);
+
+
                 holder.unlockCanvasAndPost(canvas);
             }
         }
+    }
+
+    public void checkForPlayerDeath(){
+        //check for same x and y position of pacman and ghost
+        if(((xPosGhost/blockSize) == (xPosPacman/blockSize))&&((yPosGhost/blockSize) == (yPosPacman/blockSize))){
+            Log.i("info", "Death - GameOver");
+
+            Intent failedIntent = new Intent(getContext(), FailedLevelActivity.class);
+            getContext().startActivity(failedIntent);
+        }
+
     }
 
     public void updateScores(Canvas canvas) {
@@ -231,7 +261,13 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
             xPosGhost += -blockSize / 20;
         }
 
+
         canvas.drawBitmap(ghostBitmap, xPosGhost, yPosGhost, paint);
+
+        //check for player death
+        checkForPlayerDeath();
+        Log.d("", "moveGhost: past death");
+
     }
 
 
@@ -263,7 +299,7 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
                 numOfPellets--;
                 //All of the pellets have been eaten then the game ends
                 if (numOfPellets == 0){
-                    Log.i("info", "GameOver");
+                    Log.i("info", "Level completed - GameOver");
 
                     Intent completedIntent = new Intent(getContext(), CompletedLevelActivity.class);
                     getContext().startActivity(completedIntent);
@@ -295,7 +331,12 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
             xPosPacman = blockSize * 17;
         }
 
+
         drawPacman(canvas);
+
+        //check for player death
+        checkForPlayerDeath();
+        Log.d("", "movePacman: past death");
 
         // Depending on the direction move the position of pacman
         if (direction == 0) {

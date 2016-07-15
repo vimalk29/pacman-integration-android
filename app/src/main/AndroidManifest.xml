@@ -23,6 +23,7 @@
         <activity android:name=".PauseActivity"/>
         <service android:name=".BackgroundMusicService"/>
         <activity android:name=".CompletedLevelActivity"/>
+        <activity android:name=".FailedLevelActivity"/>
     </application>
 
 </manifest>
