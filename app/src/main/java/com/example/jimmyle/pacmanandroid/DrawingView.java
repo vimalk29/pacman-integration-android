@@ -2,8 +2,6 @@ package com.example.jimmyle.pacmanandroid;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,31 +12,21 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+
 public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     private Thread thread;
     private SurfaceHolder holder;
     private boolean canDraw = true;
 
     private Paint paint;
-    private Bitmap[] pacmanRight, pacmanDown, pacmanLeft, pacmanUp;
-    private Bitmap[] arrowRight, arrowDown, arrowLeft, arrowUp;
-    private Bitmap ghostBitmap;
+
     private int totalFrame = 4;             // Total amount of frames fo each direction
     private int currentPacmanFrame = 0;     // Current Pacman frame to draw
     private int currentArrowFrame = 0;      // Current arrow frame to draw
     private long frameTicker;               // Current time since last frame has been drawn
-    private int xPosPacman;                 // x-axis position of pacman
-    private int yPosPacman;                 // y-axis position of pacman
-    private int xPosGhost;                  // x-axis position of ghost
-    private int yPosGhost;                  // y-axis position of ghost
-    int xDistance;
-    int yDistance;
+
     private float x1, x2, y1, y2;           // Initial/Final positions of swipe
-    private int direction = 4;              // Direction of the swipe, initial direction is right
-    private int nextDirection = 4;          // Buffer for the next direction you choose
-    private int viewDirection = 2;          // Direction that pacman is facing
-    private int ghostDirection;
-    private int arrowDirection = 4;
+
     private int screenWidth;                // Width of the phone screen
     private int blockSize;                  // Size of a block on the map
     public static int LONG_PRESS_TIME=750;  // Time in milliseconds
@@ -47,8 +35,13 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
 
     //Added Variables by Cole
     private int numOfPellets = 0;           //Total number of pellets remaining
-    private final short leveldata1[][];
-    private LevelGenerator levelGenerator;
+    private short currentMap[][];           //the current map being played
+
+    //refactor of DrawingView methods into separate objects/classes
+    private Movement movement;
+    private Pacman pacman;
+    private Ghost ghost;
+    private BitmapImages bitmap;
 
     public DrawingView(Context context) {
         super(context);
@@ -64,33 +57,16 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         blockSize = screenWidth/17;
         blockSize = (blockSize / 5) * 5;
 
-        //Ghost is at 8 position of length in the array x-dir
-        //leveldata[8,y]
-        xPosGhost = 8 * blockSize;
-        ghostDirection = 4;
+        currentMap = LevelGenerator.getMap(0);            //gets the test map
+        //currentMap = LevelGenerator.getMap(1);          //gets the first level
 
-        //Ghost is at 4 position of height in the array y-dir
-        //leveldata[x,4]
-        yPosGhost = 4 * blockSize;
+        movement = new Movement(currentMap, blockSize);   //create a new instance of the movement class
 
-        //Pacman is at the 8 position of length in the array x-dir
-        //leveldata[8,y]
-        xPosPacman = 8 * blockSize;
+        pacman = movement.getPacman();                    //reference of pacman object
+        ghost = movement.getGhost();                      //reference of ghost object
 
-        //Pacman is at the 13 position of height in the array y-dir
-        //leveldata[x,13]
-        yPosPacman = 13 * blockSize;
+        bitmap = new BitmapImages(blockSize, context);    //loads the bitmap images
 
-        //Created LevelGenerator class to build levels
-        levelGenerator = new LevelGenerator();
-
-        //Default level, builds what the W16 students had
-        //leveldata1 = levelGenerator.getLevelData();
-
-        //Test level, builds a map with only one pellet
-        leveldata1 = levelGenerator.getTestMap();
-
-        loadBitmapImages();
         Log.i("info", "Constructor");
     }
 
@@ -106,40 +82,24 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
             // Set background color to Transparent
             if (canvas != null) {
                 canvas.drawColor(Color.BLACK);
+
                 drawMap(canvas);
+
                 drawArrowIndicators(canvas);
 
                 updateFrame(System.currentTimeMillis());
 
-                moveGhost(canvas);
+                drawGhost(canvas);
 
-                // Moves the pacman based on his direction
-                movePacman(canvas);
+                drawPacman(canvas);
 
-                //check for player death
-                checkForPlayerDeath();
-
-                // Draw the pellets
                 drawPellets(canvas);
 
-                //Update current and high scores
                 updateScores(canvas);
-
 
                 holder.unlockCanvasAndPost(canvas);
             }
         }
-    }
-
-    public void checkForPlayerDeath(){
-        //check for same x and y position of pacman and ghost
-        if(((xPosGhost/blockSize) == (xPosPacman/blockSize))&&((yPosGhost/blockSize) == (yPosPacman/blockSize))){
-            Log.i("info", "Death - GameOver");
-
-            Intent failedIntent = new Intent(getContext(), FailedLevelActivity.class);
-            getContext().startActivity(failedIntent);
-        }
-
     }
 
     public void updateScores(Canvas canvas) {
@@ -160,209 +120,37 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         canvas.drawText(score, 11 * blockSize, 2 * blockSize - 10, paint);
     }
 
-    public void moveGhost(Canvas canvas) {
-        short ch;
+    public void drawGhost(Canvas canvas) {
+        //move ghost
+        movement.moveGhost();
 
-        xDistance = xPosPacman - xPosGhost;
-        yDistance = yPosPacman - yPosGhost;
+        //draw ghost
+        canvas.drawBitmap(bitmap.getGhostBitmap(), ghost.getXPos(), ghost.getYPos(), paint);
 
-        if ((xPosGhost % blockSize == 0) && (yPosGhost % blockSize == 0)) {
-            ch = leveldata1[yPosGhost / blockSize][xPosGhost / blockSize];
+        //check if there is a collision and handle game over
+        try{
+            movement.checkPlayerDeath();
+        } catch (PlayerDeathException e){
+            Log.i("info", "Death - GameOver");
 
-            if (xPosGhost >= blockSize * 17) {
-                xPosGhost = 0;
-            }
-            if (xPosGhost < 0) {
-                xPosGhost = blockSize * 17;
-            }
-
-
-            if (xDistance >= 0 && yDistance >= 0) { // Move right and down
-                if ((ch & 4) == 0 && (ch & 8) == 0) {
-                    if (Math.abs(xDistance) > Math.abs(yDistance)) {
-                        ghostDirection = 1;
-                    } else {
-                        ghostDirection = 2;
-                    }
-                }
-                else if ((ch & 4) == 0) {
-                    ghostDirection = 1;
-                }
-                else if ((ch & 8) == 0) {
-                    ghostDirection = 2;
-                }
-                else
-                    ghostDirection = 3;
-            }
-            if (xDistance >= 0 && yDistance <= 0) { // Move right and up
-                if ((ch & 4) == 0 && (ch & 2) == 0 ) {
-                    if (Math.abs(xDistance) > Math.abs(yDistance)) {
-                        ghostDirection = 1;
-                    } else {
-                        ghostDirection = 0;
-                    }
-                }
-                else if ((ch & 4) == 0) {
-                    ghostDirection = 1;
-                }
-                else if ((ch & 2) == 0) {
-                    ghostDirection = 0;
-                }
-                else ghostDirection = 2;
-            }
-            if (xDistance <= 0 && yDistance >= 0) { // Move left and down
-                if ((ch & 1) == 0 && (ch & 8) == 0) {
-                    if (Math.abs(xDistance) > Math.abs(yDistance)) {
-                        ghostDirection = 3;
-                    } else {
-                        ghostDirection = 2;
-                    }
-                }
-                else if ((ch & 1) == 0) {
-                    ghostDirection = 3;
-                }
-                else if ((ch & 8) == 0) {
-                    ghostDirection = 2;
-                }
-                else ghostDirection = 1;
-            }
-            if (xDistance <= 0 && yDistance <= 0) { // Move left and up
-                if ((ch & 1) == 0 && (ch & 2) == 0) {
-                    if (Math.abs(xDistance) > Math.abs(yDistance)) {
-                        ghostDirection = 3;
-                    } else {
-                        ghostDirection = 0;
-                    }
-                }
-                else if ((ch & 1) == 0) {
-                    ghostDirection = 3;
-                }
-                else if ((ch & 2) == 0) {
-                    ghostDirection = 0;
-                }
-                else ghostDirection = 2;
-            }
-            // Handles wall collisions
-            if ( (ghostDirection == 3 && (ch & 1) != 0) ||
-                    (ghostDirection == 1 && (ch & 4) != 0) ||
-                    (ghostDirection == 0 && (ch & 2) != 0) ||
-                    (ghostDirection == 2 && (ch & 8) != 0) ) {
-                ghostDirection = 4;
-            }
-        }
-
-        if (ghostDirection == 0) {
-            yPosGhost += -blockSize / 20;
-        } else if (ghostDirection == 1) {
-            xPosGhost += blockSize / 20;
-        } else if (ghostDirection == 2) {
-            yPosGhost += blockSize / 20;
-        } else if (ghostDirection == 3) {
-            xPosGhost += -blockSize / 20;
-        }
-
-
-        canvas.drawBitmap(ghostBitmap, xPosGhost, yPosGhost, paint);
-
-        //check for player death
-        checkForPlayerDeath();
-        Log.d("", "moveGhost: past death");
-
-    }
-
-
-    // Updates the character sprite and handles collisions
-    public void movePacman(Canvas canvas) {
-        short ch;
-
-        // This was based on the non-Android Pacman legacy project for CS56
-        // Check if xPos and yPos of pacman is both a multiple of block size
-        if ( (xPosPacman % blockSize == 0) && (yPosPacman  % blockSize == 0) ) {
-
-            // When pacman goes through tunnel on
-            // the right reappear at left tunnel
-            if (xPosPacman >= blockSize * 17) {
-                xPosPacman = 0;
-            }
-
-            // Is used to find the number in the level array in order to
-            // check wall placement, pellet placement, and candy placement
-            ch = leveldata1[yPosPacman / blockSize][xPosPacman / blockSize];
-
-            // If there is a pellet, eat it
-            if ((ch & 16) != 0) {
-                // Toggle pellet so it won't be drawn anymore
-                leveldata1[yPosPacman / blockSize][xPosPacman / blockSize] = (short) (ch ^ 16);
-                currentScore += 10;
-
-                //decreases the total number of pellets
-                numOfPellets--;
-                //All of the pellets have been eaten then the game ends
-                if (numOfPellets == 0){
-                    Log.i("info", "Level completed - GameOver");
-
-                    Intent completedIntent = new Intent(getContext(), CompletedLevelActivity.class);
-                    getContext().startActivity(completedIntent);
-
-                }
-
-            }
-
-            // Checks for direction buffering
-            if (!((nextDirection == 3 && (ch & 1) != 0) ||
-                    (nextDirection == 1 && (ch & 4) != 0) ||
-                    (nextDirection == 0 && (ch & 2) != 0) ||
-                    (nextDirection == 2 && (ch & 8) != 0))) {
-                viewDirection = direction = nextDirection;
-            }
-
-            // Checks for wall collisions
-            if ((direction == 3 && (ch & 1) != 0) ||
-                    (direction == 1 && (ch & 4) != 0) ||
-                    (direction == 0 && (ch & 2) != 0) ||
-                    (direction == 2 && (ch & 8) != 0)) {
-                direction = 4;
-        }
-        }
-
-        // When pacman goes through tunnel on
-        // the left reappear at right tunnel
-        if (xPosPacman < 0) {
-            xPosPacman = blockSize * 17;
-        }
-
-
-        drawPacman(canvas);
-
-        //check for player death
-        checkForPlayerDeath();
-        Log.d("", "movePacman: past death");
-
-        // Depending on the direction move the position of pacman
-        if (direction == 0) {
-            yPosPacman += -blockSize/15;
-        } else if (direction == 1) {
-            xPosPacman += blockSize/15;
-        } else if (direction == 2) {
-            yPosPacman += blockSize/15;
-        } else if (direction == 3) {
-            xPosPacman += -blockSize/15;
+            Intent failedIntent = new Intent(getContext(), FailedLevelActivity.class);
+            getContext().startActivity(failedIntent);
         }
     }
 
     private void drawArrowIndicators(Canvas canvas) {
-        switch(nextDirection) {
+        switch(movement.getPacman().getNextDir()) {
             case(0):
-                canvas.drawBitmap(arrowUp[currentArrowFrame],5*blockSize , 20*blockSize, paint);
+                canvas.drawBitmap(bitmap.getArrowUp()[currentArrowFrame],5*blockSize , 20*blockSize, paint);
                 break;
             case(1):
-                canvas.drawBitmap(arrowRight[currentArrowFrame],5*blockSize , 20*blockSize, paint);
+                canvas.drawBitmap(bitmap.getArrowRight()[currentArrowFrame],5*blockSize , 20*blockSize, paint);
                 break;
             case(2):
-                canvas.drawBitmap(arrowDown[currentArrowFrame],5*blockSize , 20*blockSize, paint);
+                canvas.drawBitmap(bitmap.getArrowDown()[currentArrowFrame],5*blockSize , 20*blockSize, paint);
                 break;
             case(3):
-                canvas.drawBitmap(arrowLeft[currentArrowFrame],5*blockSize , 20*blockSize, paint);
+                canvas.drawBitmap(bitmap.getArrowLeft()[currentArrowFrame],5*blockSize , 20*blockSize, paint);
                 break;
             default:
                 break;
@@ -373,63 +161,86 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
     // This was based on the non-Android Pacman legacy project for CS56
     // Method that draws pacman based on his viewDirection
     public void drawPacman(Canvas canvas) {
-        switch (viewDirection) {
+        //move pacman
+        movement.movePacman();
+
+        //draw pacman
+        switch (pacman.getCurDir()) {
             case (0):
-                canvas.drawBitmap(pacmanUp[currentPacmanFrame], xPosPacman, yPosPacman, paint);
+                canvas.drawBitmap(bitmap.getPacmanUp()[currentPacmanFrame], pacman.getXPos(), pacman.getYPos(), paint);
                 break;
             case (1):
-                canvas.drawBitmap(pacmanRight[currentPacmanFrame], xPosPacman, yPosPacman, paint);
+                canvas.drawBitmap(bitmap.getPacmanRight()[currentPacmanFrame], pacman.getXPos(), pacman.getYPos(), paint);
                 break;
             case (3):
-                canvas.drawBitmap(pacmanLeft[currentPacmanFrame], xPosPacman, yPosPacman, paint);
+                canvas.drawBitmap(bitmap.getPacmanLeft()[currentPacmanFrame], pacman.getXPos(), pacman.getYPos(), paint);
                 break;
             default:
-                canvas.drawBitmap(pacmanDown[currentPacmanFrame], xPosPacman, yPosPacman, paint);
+                canvas.drawBitmap(bitmap.getPacmanDown()[currentPacmanFrame], pacman.getXPos(), pacman.getYPos(), paint);
                 break;
+        }
+
+        //update pacman
+        movement.updatePacman();
+
+        //check for eaten pellet and handle winning game
+        if(movement.needMapRefresh()) {
+            currentMap = movement.updateMap();
+            currentScore+=10;
+            numOfPellets--;
+            if(numOfPellets == 0){
+                Log.i("info", "Level completed - GameOver");
+                Intent completedIntent = new Intent(getContext(), CompletedLevelActivity.class);
+                getContext().startActivity(completedIntent);
+            }
+        }
+
+        //check if there is a collision
+        try{
+            movement.checkPlayerDeath();
+        } catch (PlayerDeathException e){
+            Log.i("info", "Death - GameOver");
+
+            Intent failedIntent = new Intent(getContext(), FailedLevelActivity.class);
+            getContext().startActivity(failedIntent);
         }
     }
 
     // Method that draws pellets and updates them when eaten
     public void drawPellets(Canvas canvas) {
-        float x;
-        float y;
+        float x, y;
         for (int i = 0; i < 18; i++) {
             for (int j = 0; j < 17; j++) {
                 x = j * blockSize;
                 y = i * blockSize;
                 // Draws pellet in the middle of a block
-                if ((leveldata1[i][j] & 16) != 0) {
+                if ((currentMap[i][j] & 16) != 0) {
                     canvas.drawCircle(x + blockSize / 2, y + blockSize / 2, blockSize / 10, paint);
-
                 }
             }
         }
     }
 
-
-    //compares the leveldata[][] coords to wall values in order to determine which walls need to be drawn
-    //uses bitwise comparison where wall numbers are: 1->left, 2->top, 4->right, 8->bottom
-
     // Method to draw map layout that is based on the non-Android Pacman legacy project for CS56
     public void drawMap(Canvas canvas) {
         paint.setColor(Color.BLUE);
         paint.setStrokeWidth(2.5f);
-        int x;
-        int y;
+        int x, y;
+
         for (int i = 0; i < 18; i++) {
             for (int j = 0; j < 17; j++) {
                 x = j * blockSize;
                 y = i * blockSize;
-                if ((leveldata1[i][j] & 1) != 0) // draws left
+                if ((currentMap[i][j] & 1) != 0) // draws left
                     canvas.drawLine(x, y, x, y + blockSize - 1, paint);
 
-                if ((leveldata1[i][j] & 2) != 0) // draws top
+                if ((currentMap[i][j] & 2) != 0) // draws top
                     canvas.drawLine(x, y, x + blockSize - 1, y, paint);
 
-                if ((leveldata1[i][j] & 4) != 0) // draws right
+                if ((currentMap[i][j] & 4) != 0) // draws right
                     canvas.drawLine(
                             x + blockSize, y, x + blockSize, y + blockSize - 1, paint);
-                if ((leveldata1[i][j] & 8) != 0) // draws bottom
+                if ((currentMap[i][j] & 8) != 0) // draws bottom
                     canvas.drawLine(
                             x, y + blockSize, x + blockSize - 1, y + blockSize , paint);
             }
@@ -485,15 +296,15 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         // going to be (buffering of direction)
         if (Math.abs(yDiff) > Math.abs(xDiff)) {
             if (yDiff < 0) {
-                nextDirection = 0;
+                pacman.setNextDir(0);
             } else if (yDiff > 0) {
-                nextDirection = 2;
+                pacman.setNextDir(2);
             }
         } else {
             if (xDiff < 0) {
-                nextDirection = 3;
+                pacman.setNextDir(3);
             } else if (xDiff > 0) {
-                nextDirection = 1;
+                pacman.setNextDir(1);
             }
         }
     }
@@ -556,182 +367,12 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         canDraw = true;
     }
 
-    private void loadBitmapImages() {
-        // Scales the sprites based on screen
-        int spriteSize = screenWidth/17;        // Size of Pacman & Ghost
-        spriteSize = (spriteSize / 5) * 5;      // Keep it a multiple of 5
-        int arrowSize = 7*blockSize;            // Size of arrow indicators
-
-        // Add bitmap images of right arrow indicators
-        arrowRight = new Bitmap[7]; // 7 image frames for right direction
-        arrowRight[0] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.right_arrow_frame1), arrowSize, arrowSize, false);
-        arrowRight[1] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.right_arrow_frame2), arrowSize, arrowSize, false);
-        arrowRight[2] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.right_arrow_frame3), arrowSize, arrowSize, false);
-        arrowRight[3] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.right_arrow_frame4), arrowSize, arrowSize, false);
-        arrowRight[4] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.right_arrow_frame5), arrowSize, arrowSize, false);
-        arrowRight[5] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.right_arrow_frame6), arrowSize, arrowSize, false);
-        arrowRight[6] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.right_arrow_frame7), arrowSize, arrowSize, false);
-
-        arrowDown = new Bitmap[7]; // 7 images frames for down direction
-        arrowDown[0] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.down_arrow_frame1), arrowSize, arrowSize, false);
-        arrowDown[1] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.down_arrow_frame2), arrowSize, arrowSize, false);
-        arrowDown[2] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.down_arrow_frame3), arrowSize, arrowSize, false);
-        arrowDown[3] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.down_arrow_frame4), arrowSize, arrowSize, false);
-        arrowDown[4] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.down_arrow_frame5), arrowSize, arrowSize, false);
-        arrowDown[5] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.down_arrow_frame6), arrowSize, arrowSize, false);
-        arrowDown[6] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.down_arrow_frame7), arrowSize, arrowSize, false);
-
-        arrowUp = new Bitmap[7]; // 7 frames for each direction
-        arrowUp[0] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.up_arrow_frame1), arrowSize, arrowSize, false);
-        arrowUp[1] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.up_arrow_frame2), arrowSize, arrowSize, false);
-        arrowUp[2] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.up_arrow_frame3), arrowSize, arrowSize, false);
-        arrowUp[3] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.up_arrow_frame4), arrowSize, arrowSize, false);
-        arrowUp[4] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.up_arrow_frame5), arrowSize, arrowSize, false);
-        arrowUp[5] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.up_arrow_frame6), arrowSize, arrowSize, false);
-        arrowUp[6] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.up_arrow_frame7), arrowSize, arrowSize, false);
-
-        arrowLeft = new Bitmap[7]; // 7 images frames for left direction
-        arrowLeft[0] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.left_arrow_frame1), arrowSize, arrowSize, false);
-        arrowLeft[1] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.left_arrow_frame2), arrowSize, arrowSize, false);
-        arrowLeft[2] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.left_arrow_frame3), arrowSize, arrowSize, false);
-        arrowLeft[3] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.left_arrow_frame4), arrowSize, arrowSize, false);
-        arrowLeft[4] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.left_arrow_frame5), arrowSize, arrowSize, false);
-        arrowLeft[5] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.left_arrow_frame6), arrowSize, arrowSize, false);
-        arrowLeft[6] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.left_arrow_frame7), arrowSize, arrowSize, false);
-
-
-
-        // Add bitmap images of pacman facing right
-        pacmanRight = new Bitmap[totalFrame];
-        pacmanRight[0] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(),R.drawable.pacman_right1), spriteSize, spriteSize, false);
-        pacmanRight[1] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_right2), spriteSize, spriteSize, false);
-        pacmanRight[2] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_right3), spriteSize, spriteSize, false);
-        pacmanRight[3] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_right), spriteSize, spriteSize, false);
-        // Add bitmap images of pacman facing down
-        pacmanDown = new Bitmap[totalFrame];
-        pacmanDown[0] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_down1), spriteSize, spriteSize, false);
-        pacmanDown[1] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_down2), spriteSize, spriteSize, false);
-        pacmanDown[2] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_down3), spriteSize, spriteSize, false);
-        pacmanDown[3] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_down), spriteSize, spriteSize, false);
-        // Add bitmap images of pacman facing left
-        pacmanLeft = new Bitmap[totalFrame];
-        pacmanLeft[0] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_left1), spriteSize, spriteSize, false);
-        pacmanLeft[1] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_left2), spriteSize, spriteSize, false);
-        pacmanLeft[2] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_left3), spriteSize, spriteSize, false);
-        pacmanLeft[3] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_left), spriteSize, spriteSize, false);
-        // Add bitmap images of pacman facing up
-        pacmanUp = new Bitmap[totalFrame];
-        pacmanUp[0] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_up1), spriteSize, spriteSize, false);
-        pacmanUp[1] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_up2), spriteSize, spriteSize, false);
-        pacmanUp[2] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_up3), spriteSize, spriteSize, false);
-        pacmanUp[3] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.pacman_up), spriteSize, spriteSize, false);
-
-        ghostBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(), R.drawable.ghost), spriteSize, spriteSize, false);
-    }
-
-
-    /*
-    These numbers make up the maze. They provide information out of which we create the corners and the points.
-    Number 1 is a left corner. Numbers 2, 4 and 8 represent top, right, bottom corners respectively.
-    Number 16 is a point. These number can be added, for example number 19 in the upper left corner
-    means that the square will have top and left borders and a point (16 + 2 + 1).
-    */
-
-    // This method of drawing the map and pellets was taken from the non-Android PacMan legacy project for CS56.
-//    final short leveldata1[][] = new short[][]{
-//            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//            {19, 26, 26, 18, 26, 26, 26, 22, 0, 19, 26, 26, 26, 18, 26, 26, 22},
-//            {21, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 21},
-//            {17, 26, 26, 16, 26, 18, 26, 24, 26, 24, 26, 18, 26, 16, 26, 26, 20},
-//            {25, 26, 26, 20, 0, 25, 26, 22, 0, 19, 26, 28, 0, 17, 26, 26, 28},
-//            {0, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 0},
-//            {0, 0, 0, 21, 0, 19, 26, 24, 26, 24, 26, 22, 0, 21, 0, 0, 0},
-//            {26, 26, 26, 16, 26, 20, 0, 0, 0, 0, 0, 17, 26, 16, 26, 26, 26},
-//            {0, 0, 0, 21, 0, 17, 26, 26, 26, 26, 26, 20, 0, 21, 0, 0, 0},
-//            {0, 0, 0, 21, 0, 21, 0, 0, 0, 0, 0, 21, 0, 21, 0, 0, 0},
-//            {19, 26, 26, 16, 26, 24, 26, 22, 0, 19, 26, 24, 26, 16, 26, 26, 22},
-//            {21, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 21},
-//            {25, 22, 0, 21, 0, 0, 0, 17, 2, 20, 0, 0, 0, 21, 0, 19, 28}, // "2" in this line is for
-//            {0, 21, 0, 17, 26, 26, 18, 24, 24, 24, 18, 26, 26, 20, 0, 21, 0}, // pacman's spawn
-//            {19, 24, 26, 28, 0, 0, 25, 18, 26, 18, 28, 0, 0, 25, 26, 24, 22},
-//            {21, 0, 0, 0, 0, 0, 0, 21, 0, 21, 0, 0, 0, 0, 0, 0, 21},
-//            {25, 26, 26, 26, 26, 26, 26, 24, 26, 24, 26, 26, 26, 26, 26, 26, 28},
-//    };
-
-    //testing map with one pellet
-//    final short leveldata1[][] = new short[][]{
-//            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//            {3, 10, 10, 3, 10, 10, 10, 6, 0,3, 10,10,10,3,10,10, 6},
-//            {5, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0, 0, 0, 5, 0, 0, 5},
-//            {1,10,10, 0,10,3,10, 8,10, 8,10,3,10, 0,10,10, 4},
-//            {9,10,10, 4, 0, 9,10, 6, 0,3,10, 12, 0, 1,10,10, 12},
-//            {0, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0, 0, 0, 5, 0, 0, 0},
-//            {0, 0, 0, 5, 0,3,10, 8,10, 8,10, 6, 0, 5, 0, 0, 0},
-//            {10,10,10, 0,10, 4, 0, 0, 0, 0, 0, 1,10, 0,10,10,10},
-//            {0, 0, 0, 5, 0, 1,10,10,10,10,10, 4, 0, 5, 0, 0, 0},
-//            {0, 0, 0, 5, 0, 5, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 0},
-//            {3,10,10, 0,10, 8,10, 6, 0,3,10, 8,10, 0,10,10, 6},
-//            {5, 0, 0, 5, 0, 0, 0, 5, 0, 5, 0, 0, 0, 5, 0, 0, 5},
-//            {9, 6, 0, 5, 0, 0, 0, 1, 2, 20, 0, 0, 0, 5, 0,3, 12}, // "2" in this line is for
-//            {0, 5, 0, 1,10,10,3, 8, 8, 8,3,10,10, 4, 0, 5, 0}, // pacman's spawn
-//            {3, 8,10, 12, 0, 0, 9,3,10,3, 12, 0, 0, 9, 10, 8, 6},
-//            {5, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 5},
-//            {9,10,10,10,10,10,10, 8,10, 8,10,10,10,10,10,10, 12},
-//    };
-
     //counts the number of pellets at the start of the game
     private void countPellets() {
         numOfPellets = 0;
         for (int i = 0; i < 18; i++) {
             for (int j = 0; j < 17; j++) {
-                if ((leveldata1[i][j] & 16) != 0) {
+                if ((currentMap[i][j] & 16) != 0) {
                     //increases the total number of pellets
                     numOfPellets++;
 
