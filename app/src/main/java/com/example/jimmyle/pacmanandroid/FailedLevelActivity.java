@@ -23,7 +23,8 @@ public class FailedLevelActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.gameOver).setNeutralButton(R.string.ok, new AlertDialog.OnClickListener(){
             public void onClick(DialogInterface dialog, int which){
-                //dismiss
+                Intent failedIntent = new Intent(PlayActivity.getInstance(), MainActivity.class);
+                PlayActivity.getInstance().startActivity(failedIntent);
 
             }
         });

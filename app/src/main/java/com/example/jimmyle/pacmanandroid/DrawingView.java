@@ -1,11 +1,14 @@
 package com.example.jimmyle.pacmanandroid;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -57,8 +60,8 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         blockSize = screenWidth/17;
         blockSize = (blockSize / 5) * 5;
 
-        currentMap = LevelGenerator.getMap(0);            //gets the test map
-        //currentMap = LevelGenerator.getMap(1);          //gets the first level
+        //currentMap = LevelGenerator.getMap(0);            //gets the test map
+        currentMap = LevelGenerator.getMap(1);          //gets the first level
 
         movement = new Movement(currentMap, blockSize);   //create a new instance of the movement class
 
@@ -89,6 +92,8 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
 
                 updateFrame(System.currentTimeMillis());
 
+
+
                 drawGhost(canvas);
 
                 drawPacman(canvas);
@@ -99,6 +104,16 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
 
                 holder.unlockCanvasAndPost(canvas);
             }
+        }
+    }
+
+
+    public void tryDeath(){
+        try{
+            movement.checkPlayerDeath();
+        } catch (PlayerDeathException e){
+            Intent failedIntent = new Intent(getContext(), FailedLevelActivity.class);
+            getContext().startActivity(failedIntent);
         }
     }
 
@@ -128,14 +143,7 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         canvas.drawBitmap(bitmap.getGhostBitmap(), ghost.getXPos(), ghost.getYPos(), paint);
 
         //check if there is a collision and handle game over
-        try{
-            movement.checkPlayerDeath();
-        } catch (PlayerDeathException e){
-            Log.i("info", "Death - GameOver");
-
-            Intent failedIntent = new Intent(getContext(), FailedLevelActivity.class);
-            getContext().startActivity(failedIntent);
-        }
+        tryDeath();
     }
 
     private void drawArrowIndicators(Canvas canvas) {
@@ -196,14 +204,7 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         }
 
         //check if there is a collision
-        try{
-            movement.checkPlayerDeath();
-        } catch (PlayerDeathException e){
-            Log.i("info", "Death - GameOver");
-
-            Intent failedIntent = new Intent(getContext(), FailedLevelActivity.class);
-            getContext().startActivity(failedIntent);
-        }
+        tryDeath();
     }
 
     // Method that draws pellets and updates them when eaten
