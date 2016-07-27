@@ -2,43 +2,26 @@ package com.example.jimmyle.pacmanandroid;
 
 /**
  * Created by colerogers on 7/10/16.
+ * This class is for creating maps for each level
+ * A map is a double-dimensional short array with the values corresponding to
+ * walls and the gold pellets
+ *
+ * 1->left wall
+ * 2->top wall
+ * 4->right wall
+ * 8->bottom wall
+ * 16->pellet
+ *
+ * The numbers can be added together to form an area with walls and a pellet,
+ * such as the number 19 which would mean a square with top and left walls with a pellet(1+2+16)
+ *
+ * The map is a 18 width by 17 height double-d array.
  */
 public class LevelGenerator {
-//    private static int width = 18;
-//    private static int height = 17;
-//    private short levelData[][];
 
-    /*
-    These numbers make up the maze. They provide information out of which we create the corners and the points.
-    Number 1 is a left corner. Numbers 2, 4 and 8 represent top, right, bottom corners respectively.
-    Number 16 is a point. These number can be added, for example number 19 in the upper left corner
-    means that the square will have top and left borders and a point (16 + 2 + 1).
-    */
+    //empty constructor since we use the static methods to generate map
     public LevelGenerator(){
-//        levelData = new short[][]{
-//                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//                {19, 26, 26, 18, 26, 26, 26, 22, 0, 19, 26, 26, 26, 18, 26, 26, 22},
-//                {21, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 21},
-//                {17, 26, 26, 16, 26, 18, 26, 24, 26, 24, 26, 18, 26, 16, 26, 26, 20},
-//                {25, 26, 26, 20, 0, 25, 26, 22, 0, 19, 26, 28, 0, 17, 26, 26, 28},
-//                {0, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 0},
-//                {0, 0, 0, 21, 0, 19, 26, 24, 26, 24, 26, 22, 0, 21, 0, 0, 0},
-//                {26, 26, 26, 16, 26, 20, 0, 0, 0, 0, 0, 17, 26, 16, 26, 26, 26},
-//                {0, 0, 0, 21, 0, 17, 26, 26, 26, 26, 26, 20, 0, 21, 0, 0, 0},
-//                {0, 0, 0, 21, 0, 21, 0, 0, 0, 0, 0, 21, 0, 21, 0, 0, 0},
-//                {19, 26, 26, 16, 26, 24, 26, 22, 0, 19, 26, 24, 26, 16, 26, 26, 22},
-//                {21, 0, 0, 21, 0, 0, 0, 21, 0, 21, 0, 0, 0, 21, 0, 0, 21},
-//                {25, 22, 0, 21, 0, 0, 0, 17, 2, 20, 0, 0, 0, 21, 0, 19, 28}, // "2" in this line is for
-//                {0, 21, 0, 17, 26, 26, 18, 24, 24, 24, 18, 26, 26, 20, 0, 21, 0}, // pacman's spawn
-//                {19, 24, 26, 28, 0, 0, 25, 18, 26, 18, 28, 0, 0, 25, 26, 24, 22},
-//                {21, 0, 0, 0, 0, 0, 0, 21, 0, 21, 0, 0, 0, 0, 0, 0, 21},
-//                {25, 26, 26, 26, 26, 26, 26, 24, 26, 24, 26, 26, 26, 26, 26, 26, 28},};
     }
-    //public short[][] getLevelData(){ return this.levelData; }
-    //public void setLevelData(short [][] data){ levelData = data; }
-
-
 
     //Static method to return a map with 0 for testing and 1 onward for the actual levels
     public static short[][] getMap(int level){
