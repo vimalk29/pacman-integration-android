@@ -110,6 +110,14 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         }
     }
 
+    public void nextLevel(){
+        Globals g = Globals.getInstance();
+
+        if(g.getLevelSelector() != 3)
+            g.setLevelSelector(g.getLevelSelector()+1);     //goes to next level, max 3
+        else
+            g.setLevelSelector(1);      //goes back to level 1
+    }
 
     public void tryDeath(){
         try{
@@ -201,6 +209,10 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
             numOfPellets--;
             if(numOfPellets == 0){
                 Log.i("info", "Level completed - GameOver");
+
+                //go to next level
+                nextLevel();
+
                 Intent completedIntent = new Intent(getContext(), CompletedLevelActivity.class);
                 getContext().startActivity(completedIntent);
             }

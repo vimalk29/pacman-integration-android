@@ -24,7 +24,7 @@
             android:layout_width="175dp"
             android:layout_height="65dp"
             android:onClick="showPlayScreen"
-            android:text="@string/play"
+            android:text="@string/nextLevel"
             android:layout_above="@+id/linearLayout"
             android:layout_alignLeft="@+id/linearLayout"
             android:layout_alignStart="@+id/linearLayout" />
