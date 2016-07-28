@@ -24,5 +24,7 @@
     <string name="ok">Ok</string>
     <string name="settingsTitle"> SETTINGS</string>
     <string name="musicToggle">Toggle Music</string>
-    <string name="difficulty">Difficulty:</string>
+    <string name="difficulty">Level Difficulty:</string>
+    <string name="easyDifficulty">Easy</string>
+    <string name="mediumDifficulty">Medium</string>
 </resources>

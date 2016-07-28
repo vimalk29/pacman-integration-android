@@ -41,6 +41,32 @@
         android:textColor="@color/white"
         android:textSize="20dp"/>
 
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/easyDifficulty"
+        android:textSize="20dp"
+        android:id="@+id/button2"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:layout_weight="0.09"
+        android:onClick="changeToEasyDifficulty"/>
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mediumDifficulty"
+        android:textSize="20dp"
+        android:id="@+id/button3"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:layout_weight="0.09"
+        android:onClick="changeToMediumDifficulty"/>
+
+
+
 
 
 

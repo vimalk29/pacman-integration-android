@@ -19,6 +19,7 @@ import java.io.IOException;
 
 public class SettingsActivity extends Activity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,18 +34,21 @@ public class SettingsActivity extends Activity {
 
     private static final String TAG = "SettingsActivity";
     public void playMusic(View view){
-        if(MainActivity.getPlayer().isPlaying()){ MainActivity.getPlayer().stop(); }
+        if(MainActivity.getPlayer().isPlaying()){ MainActivity.getPlayer().pause(); }
         else{
-            try {
-                MainActivity.getPlayer().prepare();
-            }
-            catch(IOException ex){
-                Log.d(TAG,"Prepare failed");
-            }
-            finally {
                 MainActivity.getPlayer().start();
-                
-            }
+
         }
+    }
+
+    public void changeToEasyDifficulty(View view){
+        Globals g = Globals.getInstance();
+        g.setLevelSelector(0);
+
+    }
+    public void changeToMediumDifficulty(View view){
+        Globals g = Globals.getInstance();
+        g.setLevelSelector(1);
+
     }
 }

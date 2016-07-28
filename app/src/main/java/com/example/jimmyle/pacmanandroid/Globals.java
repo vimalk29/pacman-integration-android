@@ -5,6 +5,7 @@ public class Globals{
 
     // Global variable
     private int highScore;
+    private int levelSelector=1;
 
     // Restrict the constructor from being instantiated
     private Globals(){}
@@ -15,6 +16,9 @@ public class Globals{
     public int getHighScore(){
         return this.highScore;
     }
+
+    public void setLevelSelector(int newLevel){this.levelSelector=newLevel;}
+    public int getLevelSelector(){return this.levelSelector;}
 
     public static synchronized Globals getInstance(){
         if(instance==null){

@@ -60,8 +60,11 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         blockSize = screenWidth/17;
         blockSize = (blockSize / 5) * 5;
 
+        Globals map = Globals.getInstance();
+        int theMap = map.getLevelSelector();
+        currentMap = LevelGenerator.getMap(theMap);       //gets the map global var
         //currentMap = LevelGenerator.getMap(0);            //gets the test map
-        currentMap = LevelGenerator.getMap(1);          //gets the first level
+        //currentMap = LevelGenerator.getMap(1);          //gets the first level
 
         movement = new Movement(currentMap, blockSize);   //create a new instance of the movement class
 
