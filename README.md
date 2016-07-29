@@ -62,6 +62,18 @@ Right now the core of the game is mostly done. The things that are currently wor
 New features that you may like to add include settings that allow the user to change the difficulty, color of pacman/ghost, and allow users to choose their own music. Also I highly recommend that you guys add a mute button for the music because the music gets pretty annoying after a while (Note: it will get stuck in your head after you hear it for even a little bit). Perhaps you can also add another game mode and try to make it adhere to Google's [material design standard](https://www.google.com/design/spec/material-design/introduction.html#) if you have time. Well that's about it, I know this is a lot of information especially if you're new to android but trust me, it gets better and it's so much more fun and exciting once you get the hang of it. There is alot of good documentation about most of the things you need to know about android and Google is your friend.
 
 ##M16 Final Remarks##
+For future students, if you have no prior android programming experience, then it is highly recommended that you go through the android tutorial links above.
+
+To review, the code for each "screen" of the game, which handles the buttons/widgets is located under cs56-android-games-pacman/app/src/main/res/layout/("screen" you want to work on). From there, each widget's methods that are called are located in their corresponding class underthe first, /app/src/main/java/com.example.jimmyle.pacmanandroid./("screen" you want to work on)  For example, the code for the Main layout is located in MainActivity.java. This should provide a basic knowledge foundation on where to look for things in the game.
+
+We fixed one of the issues that the W16 class had which was the refactoring of the DrawingView class into seperate classes that could handle their own behavior. So far we created a BitmapImages class for getting bitmap images of pacman, the ghost and the world objects. We created to character objects Pacman and Ghost which would allow them to be a fully encapsulated class. We added a Movement class for handling the movement of the characters, one thing you could improve would be changing the methods to be static so new ghosts could be added. Also, we have a PlayerDeathException class that throws an exception when a ghost touches a player which could be improved upon if new ghosts are added.
+
+A new feature we added is the ability to select levels through the Settings page. At the handled by the Global variable "levelSelector", which is set in SettingsActivity.java and later called in DrawingView.java, which is the class used to draw the map. If you wish to add new levels, simply create a new multi-dimensional array of bitmaps in LevelGenerator.java and add in the case in LevelGenerator.java's getMap(int level) method.
+
+Another new feature we added is the ability to mute the music from the Settings page. This is handled in SettingsActivity.java.
+
+We refactored DrawingView into smaller classes and objects, but there is still a long way to go before it is a single drawing class. You can take all of the methods that run the game a put them into a game controller 
+
 -Kevin Chan and Cole Rogers
 
 ## Project History
