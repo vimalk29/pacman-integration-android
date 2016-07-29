@@ -72,9 +72,7 @@ A new feature we added is the ability to select levels through the Settings page
 
 Another new feature we added is the ability to mute the music from the Settings page. This is handled in SettingsActivity.java.
 
-We refactored DrawingView into smaller classes and objects, but there is still a long way to go before it is a single drawing class. You can take all of the methods that run the game a put them into a game controller 
-
--Kevin Chan and Cole Rogers
+We refactored DrawingView into smaller classes and objects, but there is still a long way to go before it is a single drawing class. You can take all of the methods that run the game a put them into a game controller in order to have seperate classes and behaviors. 
 
 ## Project History
 ```
