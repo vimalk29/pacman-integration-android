@@ -18,4 +18,16 @@
     </string>
     <string name="settingsLabel">Settings</string>
     <string name="resumeLabel">Resume</string>
+    <string name="wonGame">YOU WON!</string>
+    <string name="keepPlaying">Press NEXT LEVEL to keep playing</string>
+    <string name="gameOver">GAME OVER!</string>
+    <string name="ok">Ok</string>
+    <string name="settingsTitle"> SETTINGS</string>
+    <string name="musicToggle">Toggle Music</string>
+    <string name="difficulty">Level Difficulty:</string>
+    <string name="easyDifficulty">Easy</string>
+    <string name="mediumDifficulty">Medium</string>
+    <string name="hardDifficulty">Hard</string>
+    <string name="expertDifficulty">Expert</string>
+    <string name="nextLevel">Next Level</string>
 </resources>

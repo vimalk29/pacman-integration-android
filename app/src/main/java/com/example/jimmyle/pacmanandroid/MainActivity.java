@@ -7,13 +7,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
     private static MediaPlayer player;
 
     // Method to start activity for Help button
-    public void showHelpScreen(View view) {
+    public void showHelpScreen(View view){
         Intent helpIntent = new Intent(this, HelpActivity.class);
         startActivity(helpIntent);
+    }
+    //Method to start activity for Settings button
+    public void showSettingsScreen(View view){
+        Intent settingIntent = new Intent(this,SettingsActivity.class);
+        startActivity(settingIntent);
     }
 
     // Method to start activity for Play button
@@ -32,6 +39,21 @@ public class MainActivity extends AppCompatActivity {
         player.start();
     }
 
+    private static final String TAG = "MainActivity";
+    public void toggleMusic(View view){
+        if(player.isPlaying()){ player.stop(); }
+        else{
+            try {
+                player.prepare();
+            }
+            catch(IOException ex){
+                Log.d(TAG,"Prepare failed");
+            }
+            finally {
+                player.start();
+            }
+        }
+    }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.

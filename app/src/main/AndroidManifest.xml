@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.jimmyle.pacmanandroid">
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <application
         android:allowBackup="true"
@@ -21,7 +22,10 @@
         <activity android:name=".HelpActivity"/>
         <activity android:name=".PlayActivity"/>
         <activity android:name=".PauseActivity"/>
+        <activity android:name=".SettingsActivity"/>
         <service android:name=".BackgroundMusicService"/>
+        <activity android:name=".CompletedLevelActivity"/>
+        <activity android:name=".FailedLevelActivity"/>
     </application>
 
 </manifest>
