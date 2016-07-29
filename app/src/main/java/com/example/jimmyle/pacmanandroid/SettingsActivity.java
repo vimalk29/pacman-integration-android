@@ -51,4 +51,14 @@ public class SettingsActivity extends Activity {
         g.setLevelSelector(1);
 
     }
+    public void changeToHardDifficulty(View view){
+        Globals g = Globals.getInstance();
+        g.setLevelSelector(2);
+
+    }
+    public void changeToExpertDifficulty(View view){
+        Globals g = Globals.getInstance();
+        g.setLevelSelector(3);
+
+    }
 }

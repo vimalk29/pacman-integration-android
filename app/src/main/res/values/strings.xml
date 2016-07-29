@@ -27,5 +27,7 @@
     <string name="difficulty">Level Difficulty:</string>
     <string name="easyDifficulty">Easy</string>
     <string name="mediumDifficulty">Medium</string>
+    <string name="hardDifficulty">Hard</string>
+    <string name="expertDifficulty">Expert</string>
     <string name="nextLevel">Next Level</string>
 </resources>
