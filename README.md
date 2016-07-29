@@ -61,6 +61,9 @@ Right now the core of the game is mostly done. The things that are currently wor
 
 New features that you may like to add include settings that allow the user to change the difficulty, color of pacman/ghost, and allow users to choose their own music. Also I highly recommend that you guys add a mute button for the music because the music gets pretty annoying after a while (Note: it will get stuck in your head after you hear it for even a little bit). Perhaps you can also add another game mode and try to make it adhere to Google's [material design standard](https://www.google.com/design/spec/material-design/introduction.html#) if you have time. Well that's about it, I know this is a lot of information especially if you're new to android but trust me, it gets better and it's so much more fun and exciting once you get the hang of it. There is alot of good documentation about most of the things you need to know about android and Google is your friend.
 
+##M16 Final Remarks##
+-Kevin Chan and Cole Rogers
+
 ## Project History
 ```
 W16 | Kevin Lee, Jimmy Le | CS56 Conrad | 5PM Section
