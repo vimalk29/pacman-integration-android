@@ -76,5 +76,5 @@ We refactored DrawingView into smaller classes and objects, but there is still a
 
 ## Project History
 ```
-W16 | Kevin Lee, Jimmy Le | CS56 Conrad | 5PM Section
+M16 | Kevin Chan, Cole Rogers | W16 | Kevin Lee, Jimmy Le | CS56 Conrad | 5PM Section
 ```
