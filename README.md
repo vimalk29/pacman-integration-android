@@ -11,7 +11,7 @@ Authors: Kevin Lee, Jimmy Le
 5. The game should run on your device
 
 ##Screenshots
-![] (http://imgur.com/uM2tITF)
+![] (http://i.imgur.com/uM2tITF.png)
 
 ![](http://imgur.com/7BPCeaK)
 
