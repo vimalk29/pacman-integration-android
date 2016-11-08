@@ -23,6 +23,10 @@ Authors: Kevin Lee, Jimmy Le
 
 ![](http://i.imgur.com/KTMnEkE.png)
 
+###Starting a new game
+
+![](http://i.imgur.com/tYzTmNB.png)
+
 ###Gameplay
 
 ![](http://i.imgur.com/7BPCeaK.png)
@@ -30,10 +34,6 @@ Authors: Kevin Lee, Jimmy Le
 ###Pause Menu
 
 ![](http://i.imgur.com/VNNbl3o.png)
-
-###Starting a new game
-
-![](http://i.imgur.com/tYzTmNB.png)
 
 ###Game Over
 
