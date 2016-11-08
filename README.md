@@ -31,7 +31,7 @@ Authors: Kevin Lee, Jimmy Le
 
 ![](http://i.imgur.com/VNNbl3o.png)
 
-###Gameplay 2
+###Starting a new game
 
 ![](http://i.imgur.com/tYzTmNB.png)
 
