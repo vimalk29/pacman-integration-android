@@ -11,18 +11,19 @@ Authors: Kevin Lee, Jimmy Le
 5. The game should run on your device
 
 ##Screenshots
+Title Screen
 ![] (http://i.imgur.com/uM2tITF.png)
-
+Gameplay
 ![](http://i.imgur.com/7BPCeaK.png)
-
+Game Over
 ![](http://i.imgur.com/yZDJ8Ve.png)
-
+New Game
 ![](http://i.imgur.com/tYzTmNB.png)
-
+How to Play
 ![](http://i.imgur.com/8koRTPe.png)
-
+Pause Menu
 ![](http://i.imgur.com/VNNbl3o.png)
-
+Settings
 ![](http://i.imgur.com/KTMnEkE.png)
 
 
