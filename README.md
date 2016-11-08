@@ -47,7 +47,7 @@ Authors: Kevin Lee, Jimmy Le
 
 
 
-## Current progress (what is already done)
+## Current progress (Already Done)
 * Title screen
 * Three buttons on the screen (New Game, Settings, and How to Play)
 * New Game button takes you to a screen with the map layout and pacman
