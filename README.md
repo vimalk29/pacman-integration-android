@@ -13,17 +13,17 @@ Authors: Kevin Lee, Jimmy Le
 ##Screenshots
 ![] (http://i.imgur.com/uM2tITF.png)
 
-![](http://imgur.com/7BPCeaK)
+![](http://i.imgur.com/7BPCeaK.png)
 
-![](http://imgur.com/yZDJ8Ve)
+![](http://i.imgur.com/yZDJ8Ve.png)
 
-![](http://imgur.com/tYzTmNB)
+![](http://i.imgur.com/tYzTmNB.png)
 
-![](http://imgur.com/8koRTPe)
+![](http://i.imgur.com/8koRTPe.png)
 
-![](http://imgur.com/VNNbl3o)
+![](http://i.imgur.com/VNNbl3o.png)
 
-![](http://imgur.com/KTMnEkE)
+![](http://i.imgur.com/KTMnEkE.png)
 
 
 
