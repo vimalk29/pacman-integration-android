@@ -15,29 +15,34 @@ Authors: Kevin Lee, Jimmy Le
 
 ![] (http://i.imgur.com/uM2tITF.png)
 
-###Gameplay
-
-![](http://i.imgur.com/7BPCeaK.png)
-
-###Game Over
-
-![](http://i.imgur.com/yZDJ8Ve.png)
-
-###New Game
-
-![](http://i.imgur.com/tYzTmNB.png)
-
 ###How to Play
 
 ![](http://i.imgur.com/8koRTPe.png)
+
+###Settings
+
+![](http://i.imgur.com/KTMnEkE.png)
+
+###Gameplay
+
+![](http://i.imgur.com/7BPCeaK.png)
 
 ###Pause Menu
 
 ![](http://i.imgur.com/VNNbl3o.png)
 
-###Settings
+###Gameplay 2
 
-![](http://i.imgur.com/KTMnEkE.png)
+![](http://i.imgur.com/tYzTmNB.png)
+
+###Game Over
+
+![](http://i.imgur.com/yZDJ8Ve.png)
+
+
+
+
+
 
 
 
