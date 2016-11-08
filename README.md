@@ -11,7 +11,21 @@ Authors: Kevin Lee, Jimmy Le
 5. The game should run on your device
 
 ##Screenshots
-[[https://github.com/username/repository/blob/master/img/octocat.png|alt=octocat]]
+![] (http://imgur.com/uM2tITF)
+
+![](http://imgur.com/7BPCeaK)
+
+![](http://imgur.com/yZDJ8Ve)
+
+![](http://imgur.com/tYzTmNB)
+
+![](http://imgur.com/8koRTPe)
+
+![](http://imgur.com/VNNbl3o)
+
+![](http://imgur.com/KTMnEkE)
+
+
 
 
 ## Current progress (what is already done)
