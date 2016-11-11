@@ -10,13 +10,56 @@ Authors: Kevin Lee, Jimmy Le
 4. Choose the device you wish to run it on such as your phone or the Android Studio emulator
 5. The game should run on your device
 
-## Current progress
+##Screenshots
+###Title Screen
+
+![] (http://i.imgur.com/uM2tITF.png)
+
+###How to Play
+
+![](http://i.imgur.com/8koRTPe.png)
+
+###Settings
+
+![](http://i.imgur.com/KTMnEkE.png)
+
+###Starting a new game
+
+![](http://i.imgur.com/tYzTmNB.png)
+
+###Gameplay
+
+![](http://i.imgur.com/7BPCeaK.png)
+
+###Pause Menu
+
+![](http://i.imgur.com/VNNbl3o.png)
+
+###Game Over
+
+![](http://i.imgur.com/yZDJ8Ve.png)
+
+
+
+
+
+
+
+
+
+## Current progress (Already Done)
 * Title screen
-* Three buttons on the screen (New Game, High Scores, and Help)
+* Three buttons on the screen (New Game, Settings, and How to Play)
 * New Game button takes you to a screen with the map layout and pacman
-* Help button leads to the help screen
+* How to play button leads to the how to play screen
 * You can move pacman around by swiping in the direction you wish to go
-* Pacman will eat the pellets
+* Pacman will eat the pellets.
+* Pacman dies when he touches the ghost.
+* The game can be paused.
+* The High Score and the Current Score are displayed at the top of the screen during the game.
+* Eating pellets increases the current score.
+* If the current score surpasses the high score, the high score updates accordingly.
+* There is background music that starts and stops appropriately.
 
 ## User Stories (Implementation Tasks/Goals):
 1. ~~As a user, I can see the introduction screen when I open the app so that I can know it has sucessfully opened.~~ (100pts)
@@ -40,17 +83,24 @@ Authors: Kevin Lee, Jimmy Le
 13. ~~As a user, I can see enemy ghosts on the board so that I know where they spawn.~~ (50pts)
 14. As a user, I can see enemy ghosts move so that I know where NOT to move. (250pts)
  * ~~The ghosts should animate.~~ (50 pts)
- * The ghosts should move according to unique personalities/behaviors. (200 pts)
+ * The ghosts should move according to unique personalities/behaviors. (200pts)
    * [Ghost AI Movement](http://gameinternals.com/post/2072558330/understanding-pac-man-ghost-behavior)
+ * There is more than one ghost in the game. (200pts)
 15. ~~As a user, I can keep track of my highest score so I can strive to beat it.~~ (50pts)
 16. ~~As a user, I can hear Pacman background music so I can get HYPED.~~ (150pts)
- * ~~The music shoud start when the user opens the app.~~ (25 pts)
- * ~~The music should stop when the app is not in focus.~~ (50 pts)
- * ~~The music should be shared across all screens so there is no overlap.~~ (75 pts)
+ * ~~The music shoud start when the user opens the app.~~ (25pts)
+ * ~~The music should stop when the app is not in focus.~~ (50pts)
+ * ~~The music should be shared across all screens so there is no overlap.~~ (75pts)
 17. As a user, I can see a mute button so that I have the ability to mute the music. (50pts)
 18. As a user, I can click on the mute button to mute the music. (100 pts) 
 19. As a user, I can set different difficulties so that I can make it easier or harder for myself. (200pts)
 20. As a user, I can change the colors of the game so I can set things to my color preference. (100pts)
+21. As a user, I can pause and continue the game using a pause button. (100pts)
+22. As a user, I can start a new game after losing the previous game so that I can play again.
+23. As a user, I can use the mega-pellet so that I can kill ghosts.
+24. As a user, I can respawn the ghosts so that they come back after dying.
+25. As a user, I can save settings so that preferences are set.
+
 
 ##W16 Final Remarks##
 For future students, If you have no prior experience in android programming then it is highly recommended you at least go through the android tutorial [here](https://github.com/UCSB-CS56-Projects/cs56-android-getting-started). There are a couple of things that you should also be very familiar with which include: [Drawing/Animation](http://developer.android.com/guide/topics/graphics/2d-graphics.html), [Activities](http://developer.android.com/guide/components/activities.html), [Intents](http://developer.android.com/reference/android/content/Intent.html), [Touch Events](http://developer.android.com/reference/android/view/MotionEvent.html), [Bitmaps](http://developer.android.com/training/displaying-bitmaps/index.html), [Supporting multiple screens](http://developer.android.com/guide/practices/screens_support.html).
@@ -76,5 +126,5 @@ We refactored DrawingView into smaller classes and objects, but there is still a
 
 ## Project History
 ```
-M16 | Kevin Chan, Cole Rogers | W16 | Kevin Lee, Jimmy Le | CS56 Conrad | 5PM Section
+M16 | Kevin Chan, Cole Rogers | W16 | Kevin Lee, Jimmy Le | F16 | Austin Dorotheo, Miclos Lobins | CS56 Conrad | 4PM Section
 ```
