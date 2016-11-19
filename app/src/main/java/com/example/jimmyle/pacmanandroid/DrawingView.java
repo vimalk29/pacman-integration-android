@@ -1,6 +1,9 @@
 package com.example.jimmyle.pacmanandroid;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.view.View;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -43,7 +46,10 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
     //refactor of DrawingView methods into separate objects/classes
     private Movement movement;
     private Pacman pacman;
-    private Ghost ghost;
+    private Ghost ghost0;
+    private Ghost ghost1;
+    private Ghost ghost2;
+    private Ghost ghost3;
     private BitmapImages bitmap;
 
     public DrawingView(Context context) {
@@ -69,7 +75,22 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         movement = new Movement(currentMap, blockSize);   //create a new instance of the movement class
 
         pacman = movement.getPacman();                    //reference of pacman object
-        ghost = movement.getGhost();                      //reference of ghost object
+        ghost0 = movement.getGhost0();                      //reference of ghost object 0
+        ghost1 = movement.getGhost1();                      //reference of ghost object 1
+        ghost2 = movement.getGhost2();                      //reference of ghost object 2
+        ghost3 = movement.getGhost3();                      //reference of ghost object 3
+
+        //each ghost spawns at a different position
+        ghost1.setXPos(4 * blockSize);
+        ghost1.setYPos(8 * blockSize);
+        ghost1.setDir(1);
+        ghost2.setXPos(12 * blockSize);
+        ghost2.setYPos(8 * blockSize);
+        ghost2.setDir(2);
+        ghost3.setXPos(4 * blockSize);
+        ghost3.setYPos(0 * blockSize);
+        ghost3.setDir(3);
+
 
         bitmap = new BitmapImages(blockSize, context);    //loads the bitmap images
 
@@ -97,12 +118,20 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
 
 
 
-                drawGhost(canvas);
+                drawGhost0(canvas);
+
+                drawGhost1(canvas);
+
+                drawGhost2(canvas);
+
+                drawGhost3(canvas);
 
                 drawPacman(canvas);
 
                 drawPellets(canvas);
 
+                drawPauseButton(canvas);
+                drawMuteButton(canvas);
                 updateScores(canvas);
 
                 holder.unlockCanvasAndPost(canvas);
@@ -146,15 +175,54 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
         canvas.drawText(score, 11 * blockSize, 2 * blockSize - 10, paint);
     }
 
-    public void drawGhost(Canvas canvas) {
+    public void drawPauseButton(Canvas canvas) {
+        //draw pause button
+        canvas.drawBitmap(bitmap.getPauseBitmap(), 0, 20*blockSize, paint);
+    }
+
+    public void drawMuteButton(Canvas canvas) {
+        //draw mute button
+        canvas.drawBitmap(bitmap.getMuteBitmap(), 0 * blockSize, 24*blockSize, paint);
+    }
+
+    public void drawGhost0(Canvas canvas) {
         //move ghost
-        movement.moveGhost();
+        movement.moveGhost0();
 
         //draw ghost
-        canvas.drawBitmap(bitmap.getGhostBitmap(), ghost.getXPos(), ghost.getYPos(), paint);
-
+        canvas.drawBitmap(bitmap.getGhostBitmap0(), ghost0.getXPos(), ghost0.getYPos(), paint);
         //check if there is a collision and handle game over
         tryDeath();
+    }
+
+    public void drawGhost1(Canvas canvas) {
+        //move ghost
+            movement.moveGhost1();
+
+            //draw ghost
+            canvas.drawBitmap(bitmap.getGhostBitmap1(), ghost1.getXPos(), ghost1.getYPos(), paint);
+            //check if there is a collision and handle game over
+            tryDeath();
+    }
+
+    public void drawGhost2(Canvas canvas) {
+        //move ghost
+            movement.moveGhost2();
+
+            //draw ghost
+            canvas.drawBitmap(bitmap.getGhostBitmap2(), ghost2.getXPos(), ghost2.getYPos(), paint);
+            //check if there is a collision and handle game over
+            tryDeath();
+    }
+
+    public void drawGhost3(Canvas canvas) {
+        //move ghost
+            movement.moveGhost3();
+
+            //draw ghost
+            canvas.drawBitmap(bitmap.getGhostBitmap3(), ghost3.getXPos(), ghost3.getYPos(), paint);
+            //check if there is a collision and handle game over
+            tryDeath();
     }
 
     private void drawArrowIndicators(Canvas canvas) {
@@ -238,6 +306,8 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
     }
 
     // Method to draw map layout that is based on the non-Android Pacman legacy project for CS56
+    // add pause/unpause button
+    // add mute/unmute button
     public void drawMap(Canvas canvas) {
         paint.setColor(Color.BLUE);
         paint.setStrokeWidth(2.5f);
@@ -262,13 +332,24 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
             }
         }
         paint.setColor(Color.WHITE);
+
     }
 
-    Runnable longPressed = new Runnable() {
+    Runnable pauseThread = new Runnable() {
         public void run() {
-            Log.i("info", "LongPress");
+            Log.i("info", "pauseThread");
             Intent pauseIntent = new Intent(getContext(), PauseActivity.class);
             getContext().startActivity(pauseIntent);
+        }
+    };
+
+    Runnable musicThread = new Runnable() {
+        public void run() {
+            Log.i("info", "musicThread");
+            if (MainActivity.getPlayer().isPlaying())
+                MainActivity.getPlayer().pause();
+            else
+                MainActivity.getPlayer().start();
         }
     };
 
@@ -279,14 +360,24 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
             case (MotionEvent.ACTION_DOWN): {
                 x1 = event.getX();
                 y1 = event.getY();
-                handler.postDelayed(longPressed, LONG_PRESS_TIME);
+                if (x1 >= blockSize*0 && x1 <= blockSize*4 && y1 >= blockSize*20 && y1 <= blockSize*22) {
+                    handler.postAtFrontOfQueue(pauseThread);
+                 }
+                if (x1 >= blockSize*0 && x1 <= blockSize*4 && y1 >= blockSize*24 && y1 <= blockSize*26) {
+                    handler.postAtFrontOfQueue(musicThread);
+                }
                 break;
             }
             case (MotionEvent.ACTION_UP): {
                 x2 = event.getX();
                 y2 = event.getY();
                 calculateSwipeDirection();
-                handler.removeCallbacks(longPressed);
+                if (x1 >= blockSize*0 && x1 <= blockSize*4 && y1 >= blockSize*20 && y1 <= blockSize*22) {
+                    handler.removeCallbacks(pauseThread);
+                }
+                if (x1 >= blockSize*0 && x1 <= blockSize*4 && y1 >= blockSize*24 && y1 <= blockSize*26) {
+                    handler.removeCallbacks(musicThread);
+                }
                 break;
             }
         }
