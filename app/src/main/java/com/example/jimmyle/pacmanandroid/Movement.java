@@ -1,5 +1,8 @@
 package com.example.jimmyle.pacmanandroid;
 
+import android.content.Intent;
+import android.content.Context;
+
 /**
  * Created by colerogers on 7/25/16.
  */
@@ -691,6 +694,15 @@ public class Movement {
             ghost3.setYPos(ghost3.getYPos() + blockSize/20);
         } else if (ghost3.getDir() == 3) {
             ghost3.setXPos(ghost3.getXPos() + -blockSize/20);
+        }
+    }
+
+    public void tryDeath(Context context){
+        try{
+            checkPlayerDeath();
+        } catch (PlayerDeathException e){
+            Intent failedIntent = new Intent(context, FailedLevelActivity.class);
+            context.startActivity(failedIntent);
         }
     }
 }//Movement
