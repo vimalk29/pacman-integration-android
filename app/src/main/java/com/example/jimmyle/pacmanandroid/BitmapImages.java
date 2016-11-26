@@ -9,17 +9,14 @@ import android.content.Context;
  */
 public class BitmapImages {
     //private instance variables
-    private int spriteSize, arrowSize, buttonSizeHeight, buttonSizeWidth;
+    private int spriteSize, arrowSize;
     private Bitmap[] pacmanRight, pacmanDown, pacmanLeft, pacmanUp;
     private Bitmap[] arrowRight, arrowDown, arrowLeft, arrowUp;
-    private Bitmap ghostBitmap0, ghostBitmap1, ghostBitmap2, ghostBitmap3;
-    private Bitmap muteBitmap, pauseBitmap;
+    private Bitmap ghostBitmap;
 
     public BitmapImages(int blockSize, Context context){
         spriteSize = blockSize;
         arrowSize = blockSize*7;
-        buttonSizeHeight = blockSize*2;
-        buttonSizeWidth = blockSize*4;
 
         // Add bitmap images of right arrow indicators
         arrowRight = new Bitmap[7]; // 7 image frames for right direction
@@ -137,44 +134,19 @@ public class BitmapImages {
         pacmanUp[3] = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
                 context.getResources(), R.drawable.pacman_up), spriteSize, spriteSize, false);
 
-        // Add bitmap image of mute
-        muteBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                context.getResources(), R.drawable.mute), buttonSizeWidth, buttonSizeHeight, false);
-
-        // Add bitmap image of pause
-        pauseBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                context.getResources(), R.drawable.pause), buttonSizeWidth, buttonSizeHeight, false);
 
         // Add bitmap image of ghost
-        ghostBitmap0 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                context.getResources(), R.drawable.ghost0), spriteSize, spriteSize, false);
-
-        // Add bitmap image of ghost
-        ghostBitmap1 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                context.getResources(), R.drawable.ghost1), spriteSize, spriteSize, false);
-
-        // Add bitmap image of ghost
-        ghostBitmap2 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                context.getResources(), R.drawable.ghost2), spriteSize, spriteSize, false);
-
-        // Add bitmap image of ghost
-        ghostBitmap3 = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                context.getResources(), R.drawable.ghost3), spriteSize, spriteSize, false);
+        ghostBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+                context.getResources(), R.drawable.ghost), spriteSize, spriteSize, false);
     }
 
     //public getters
-    public Bitmap getPauseBitmap(){ return pauseBitmap; }
-    public Bitmap getMuteBitmap(){ return muteBitmap; }
-
     public Bitmap[] getPacmanRight(){ return pacmanRight; }
     public Bitmap[] getPacmanLeft(){ return pacmanLeft; }
     public Bitmap[] getPacmanUp(){ return pacmanUp; }
     public Bitmap[] getPacmanDown(){ return pacmanDown; }
 
-    public Bitmap getGhostBitmap0(){ return ghostBitmap0; }
-    public Bitmap getGhostBitmap1(){ return ghostBitmap1; }
-    public Bitmap getGhostBitmap2(){ return ghostBitmap2; }
-    public Bitmap getGhostBitmap3(){ return ghostBitmap3; }
+    public Bitmap getGhostBitmap(){ return ghostBitmap; }
 
     public Bitmap[] getArrowRight(){ return arrowRight; }
     public Bitmap[] getArrowLeft(){ return arrowLeft; }
