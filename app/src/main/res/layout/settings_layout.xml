@@ -46,8 +46,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/easyDifficulty"
+        android:textSize="20dp"
         android:id="@+id/button2"
         android:layout_gravity="center_horizontal"
+        android:textColor="@color/black"
         android:layout_weight="0.09"
         android:onClick="changeToEasyDifficulty"/>
 
@@ -69,7 +71,7 @@
         android:layout_height="wrap_content"
         android:text="@string/hardDifficulty"
         android:textSize="20dp"
-        android:id="@+id/button4"
+        android:id="@+id/button3"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/black"
         android:layout_weight="0.09"
@@ -81,7 +83,7 @@
         android:layout_height="wrap_content"
         android:text="@string/expertDifficulty"
         android:textSize="20dp"
-        android:id="@+id/button5"
+        android:id="@+id/button3"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/black"
         android:layout_weight="0.09"

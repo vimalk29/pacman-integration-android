@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     public void showPlayScreen(View view) {
         Intent playIntent = new Intent(this, PlayActivity.class);
         startActivity(playIntent);
-        GameConditions.resetCurrentScore();
     }
 
     @Override
