@@ -124,6 +124,31 @@ Another new feature we added is the ability to mute the music from the Settings 
 
 We refactored DrawingView into smaller classes and objects, but there is still a long way to go before it is a single drawing class. You can take all of the methods that run the game a put them into a game controller in order to have seperate classes and behaviors. 
 
+##F16 Final Remarks##
+For future students, if you have no prior android programming experience, then it is highly 
+recommended that you go through the android tutorial links above. There are a couple of things 
+that you should also be very familiar with which include: Drawing/Animation, Activities, Intents, 
+Touch Events, Bitmaps, Supporting multiple screens.
+
+The game's current and completed issues are listed above.
+We've added screenshots to show what the game and its menus look like. 
+
+The classes are stored in app/src/main/java/com/example/jimmyle/pacmanandroid.
+
+The classes that end in Activity hold the code for the menus. The code for the buttons and related widgets in the menus are stored in the .xml files in app/src/main/res/layout. 
+The images are stored in app/src/main/res/drawable. The BitmapImages class loads these images.
+The Gameconditions class holds the conditions that are run per instance of the game. 
+The Globals class holds the values that exist outside of the game such as high score. 
+The Movement class holds the movement behavior the ghosts and pacman. There are four copies of 
+ghost movement methods to reflect each ghost. 
+The UserInterface class holds the draw methods for the elements of the user class.
+There are currently three levels in the game and the code for those levels is stored in the LevelGenerator class.
+The DrawingView class instantiates the map, draws the figures, and runs the game. 
+Drawing View has been refactored to separate the draw methods, game conditions, and entity movements.
+A pause button and a mute button have been added to the game.
+There are some instances that cause the game to crash but otherwise the game runs fine.
+
+Some issues future students can focus on are giving each ghost a unique behavior, adding more levels to expand the scope of the game, adding powerups (http://pacman.wikia.com/wiki/Power-Ups), adding sound effects such as the wakka noise, and adding animations such as the death animation.
 ## Project History
 ```
 M16 | Kevin Chan, Cole Rogers | W16 | Kevin Lee, Jimmy Le | F16 | Austin Dorotheo, Miclos Lobins | CS56 Conrad | 4PM Section
