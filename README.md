@@ -141,7 +141,7 @@ The images are stored in app/src/main/res/drawable. The BitmapImages class loads
 The Gameconditions class holds the conditions that are run per instance of the game. 
 The Globals class holds the values that exist outside of the game such as high score. 
 The Movement class holds the movement behavior the ghosts and pacman. There are four copies of 
-ghost movement methods to reflect each ghost. 
+ghost movement methods for each ghost. 
 The UserInterface class holds the draw methods for the elements of the user class.
 There are currently three levels in the game and the code for those levels is stored in the LevelGenerator class.
 The DrawingView class instantiates the map, draws the figures, and runs the game. 
