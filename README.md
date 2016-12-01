@@ -132,6 +132,7 @@ Touch Events, Bitmaps, Supporting multiple screens.
 
 The game's current and completed issues are listed above.
 We've added screenshots to show what the game and its menus look like. 
+There are some instances that cause the game to crash but otherwise the game runs fine.
 
 The classes are stored in app/src/main/java/com/example/jimmyle/pacmanandroid.
 
@@ -144,9 +145,9 @@ ghost movement methods to reflect each ghost.
 The UserInterface class holds the draw methods for the elements of the user class.
 There are currently three levels in the game and the code for those levels is stored in the LevelGenerator class.
 The DrawingView class instantiates the map, draws the figures, and runs the game. 
+
 Drawing View has been refactored to separate the draw methods, game conditions, and entity movements.
-A pause button and a mute button have been added to the game.
-There are some instances that cause the game to crash but otherwise the game runs fine.
+A pause button and a mute button have been added to the game. More ghosts have been added to the game. The difficulty buttons now change color when selected.
 
 Some issues future students can focus on are giving each ghost a unique behavior, adding more levels to expand the scope of the game, adding powerups (http://pacman.wikia.com/wiki/Power-Ups), adding sound effects such as the wakka noise, and adding animations such as the death animation.
 ## Project History
