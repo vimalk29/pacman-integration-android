@@ -1,4 +1,4 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.jimmyle.pacmanandroid.gamefiles.activities.GameActivity;
+import com.example.jimmyle.pacmanandroid.gamefiles.activities.PauseActivity;
 
 
 public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
@@ -134,10 +137,10 @@ public class DrawingView extends SurfaceView implements Runnable, SurfaceHolder.
     Runnable musicThread = new Runnable() {
         public void run() {
             Log.i("info", "musicThread");
-            if (MainActivity.getPlayer().isPlaying())
-                MainActivity.getPlayer().pause();
+            if (GameActivity.getPlayer().isPlaying())
+                GameActivity.getPlayer().pause();
             else
-                MainActivity.getPlayer().start();
+                GameActivity.getPlayer().start();
         }
     };
 

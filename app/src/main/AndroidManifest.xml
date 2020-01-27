@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.jimmyle.pacmanandroid">
-    <uses-permission android:name="android.permission.GET_TASKS"/>
+
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activities.DashboardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HelpActivity"/>
-        <activity android:name=".PlayActivity"/>
-        <activity android:name=".PauseActivity"/>
-        <activity android:name=".SettingsActivity"/>
-        <service android:name=".BackgroundMusicService"/>
-        <activity android:name=".CompletedLevelActivity"/>
-        <activity android:name=".FailedLevelActivity"/>
+        <activity android:name=".gamefiles.activities.GameActivity"/>
+        <activity android:name=".gamefiles.activities.HelpActivity" />
+        <activity android:name=".gamefiles.activities.PlayActivity" />
+        <activity android:name=".gamefiles.activities.PauseActivity" />
+        <activity android:name=".gamefiles.activities.SettingsActivity" />
+
+        <service android:name=".gamefiles.BackgroundMusicService" />
+
+        <activity android:name=".gamefiles.activities.CompletedLevelActivity" />
+        <activity android:name=".gamefiles.activities.FailedLevelActivity" />
     </application>
 
 </manifest>

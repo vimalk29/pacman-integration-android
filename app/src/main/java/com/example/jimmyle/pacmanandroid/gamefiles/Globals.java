@@ -1,4 +1,4 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles;
 
 public class Globals{
     private static Globals instance;

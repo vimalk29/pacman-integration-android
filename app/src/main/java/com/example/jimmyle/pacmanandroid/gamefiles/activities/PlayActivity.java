@@ -1,9 +1,12 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles.activities;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.jimmyle.pacmanandroid.gamefiles.DrawingView;
+import com.example.jimmyle.pacmanandroid.gamefiles.Globals;
 
 public class PlayActivity extends Activity {
     static PlayActivity activity;
@@ -31,7 +34,7 @@ public class PlayActivity extends Activity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("high_score", globals.getHighScore());
         editor.apply();
-        MainActivity.getPlayer().pause();
+        GameActivity.getPlayer().pause();
     }
 
     @Override
@@ -39,7 +42,7 @@ public class PlayActivity extends Activity {
         Log.i("info", "onResume");
         super.onResume();
         drawingView.resume();
-        MainActivity.getPlayer().start();
+        GameActivity.getPlayer().start();
 
     }
 

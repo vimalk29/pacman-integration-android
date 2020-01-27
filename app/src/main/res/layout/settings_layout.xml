@@ -6,7 +6,7 @@
     android:weightSum="1"
     android:background="@color/material_blue_grey_900"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.jimmyle.pacmanandroid.SettingsActivity">
+    tools:context="com.example.jimmyle.pacmanandroid.gamefiles.activities.SettingsActivity">
 
 
     <TextView

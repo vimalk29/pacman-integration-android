@@ -1,7 +1,9 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles;
 
 import android.content.Intent;
 import android.content.Context;
+
+import com.example.jimmyle.pacmanandroid.gamefiles.activities.FailedLevelActivity;
 
 /**
  * Created by colerogers on 7/25/16.

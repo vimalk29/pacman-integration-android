@@ -1,4 +1,4 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

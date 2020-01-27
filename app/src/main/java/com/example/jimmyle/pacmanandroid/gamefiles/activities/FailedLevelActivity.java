@@ -1,4 +1,4 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.jimmyle.pacmanandroid.R;
 
 /**
  * Created by colerogers on 7/10/16.
@@ -18,13 +20,14 @@ public class FailedLevelActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.failed_layout);
-        MainActivity.getPlayer().start();
+        GameActivity.getPlayer().start();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.gameOver).setNeutralButton(R.string.ok, new AlertDialog.OnClickListener(){
             public void onClick(DialogInterface dialog, int which){
-                Intent failedIntent = new Intent(PlayActivity.getInstance(), MainActivity.class);
-                PlayActivity.getInstance().startActivity(failedIntent);
+//                Intent failedIntent = new Intent(PlayActivity.getInstance(), GameActivity.class);
+//                PlayActivity.getInstance().startActivity(failedIntent);
+//                finish();
 
             }
         });
@@ -45,5 +48,10 @@ public class FailedLevelActivity extends Activity {
         startActivity(playIntent);
         PlayActivity.getInstance().finish();
         this.finish();
+    }
+
+    public void showSetting(View view){
+        Intent settingIntent = new Intent(this,SettingsActivity.class);
+        startActivity(settingIntent);
     }
 }

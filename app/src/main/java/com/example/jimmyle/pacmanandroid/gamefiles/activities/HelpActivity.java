@@ -1,20 +1,22 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.example.jimmyle.pacmanandroid.R;
 
 public class HelpActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.help_layout);
-        MainActivity.getPlayer().start();
+        GameActivity.getPlayer().start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MainActivity.getPlayer().pause();
+        GameActivity.getPlayer().pause();
     }
 
 }

@@ -1,16 +1,12 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
-import java.io.IOException;
+import com.example.jimmyle.pacmanandroid.R;
+import com.example.jimmyle.pacmanandroid.gamefiles.Globals;
 
 
 /**
@@ -24,22 +20,22 @@ public class SettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_layout);
-        MainActivity.getPlayer().start();
+        GameActivity.getPlayer().start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MainActivity.getPlayer().pause();
+        GameActivity.getPlayer().pause();
     }
 
     private static final String TAG = "SettingsActivity";
 
     public void playMusic(View view) {
-        if (MainActivity.getPlayer().isPlaying()) {
-            MainActivity.getPlayer().pause();
+        if (GameActivity.getPlayer().isPlaying()) {
+            GameActivity.getPlayer().pause();
         } else {
-            MainActivity.getPlayer().start();
+            GameActivity.getPlayer().start();
 
         }
     }

@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/black"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.jimmyle.pacmanandroid.MainActivity">
+    tools:context="com.example.jimmyle.pacmanandroid.gamefiles.activities.GameActivity">
 
     <ImageView
         android:id="@+id/MainMenuImage"
@@ -20,41 +20,52 @@
         android:scaleType="fitXY"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_alignBottom="@+id/MainMenuImage"
         android:layout_marginBottom="75dp"
-        android:layout_marginStart="35dp"
-        android:layout_marginLeft="35dp">
+        android:layout_marginStart="35dp">
 
         <Button
-            android:layout_width="175dp"
-            android:layout_height="65dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:background="@drawable/rounded_corner_border"
+            android:textSize="18sp"
             android:onClick="resumeGame"
             android:text="@string/resumeLabel"
             android:layout_marginBottom="5dp"/>
 
         <Button
-            android:layout_width="175dp"
-            android:layout_height="65dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:background="@drawable/rounded_corner_border"
+            android:textSize="18sp"
             android:onClick="showPlayScreen"
             android:text="@string/play"
             android:layout_marginBottom="5dp"/>
 
         <Button
-            android:layout_width="175dp"
-            android:layout_height="65dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:background="@drawable/rounded_corner_border"
+            android:textSize="18sp"
             android:text="@string/settingsLabel"
+            android:onClick="showSetting"
             android:layout_marginBottom="5dp"/>
 
 
         <Button
-            android:layout_width="175dp"
-            android:layout_height="65dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:background="@drawable/rounded_corner_border"
+            android:textSize="18sp"
             android:onClick="showHelpScreen"
-            android:text="@string/help"
-            />
+            android:text="@string/help" />
 
     </LinearLayout>
 

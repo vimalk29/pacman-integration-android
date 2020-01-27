@@ -1,8 +1,10 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.content.Context;
+
+import com.example.jimmyle.pacmanandroid.R;
 
 /**
  * Created by colerogers on 7/25/16.

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
+    android:gravity="center"
     android:weightSum="1">
 
 
@@ -25,7 +26,7 @@
         android:textSize="17dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.04"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:textColor="@color/white"/>
@@ -42,7 +43,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
         android:text="@string/controls"
         android:textSize="17dp"
         android:layout_gravity="center_horizontal"

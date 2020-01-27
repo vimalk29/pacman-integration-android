@@ -1,8 +1,10 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles;
 
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.example.jimmyle.pacmanandroid.gamefiles.activities.CompletedLevelActivity;
 
 /**
  * Created by M on 11/19/2016.

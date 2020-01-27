@@ -1,14 +1,12 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles.activities;
 
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.example.jimmyle.pacmanandroid.R;
 
 import java.io.IOException;
 
@@ -24,7 +22,7 @@ public class CompletedLevelActivity extends Activity {
 
         //sets up the view of the completed game screen
         setContentView(R.layout.completed_layout);
-        MainActivity.getPlayer().start();
+        GameActivity.getPlayer().start();
     }
 
     // Method to start activity for Help button
@@ -48,17 +46,20 @@ public class CompletedLevelActivity extends Activity {
     }
 
     private static final String TAG = "SettingsActivity";
+
     public void playMusic(View view){
-        if(MainActivity.getPlayer().isPlaying()){ MainActivity.getPlayer().stop(); }
+        if(GameActivity.getPlayer().isPlaying()){
+            GameActivity.getPlayer().stop();
+        }
         else{
             try {
-                MainActivity.getPlayer().prepare();
+                GameActivity.getPlayer().prepare();
             }
             catch(IOException ex){
                 Log.d(TAG,"Prepare failed");
             }
             finally {
-                MainActivity.getPlayer().start();
+                GameActivity.getPlayer().start();
             }
         }
     }

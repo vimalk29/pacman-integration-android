@@ -1,9 +1,11 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles;
 
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+
+import com.example.jimmyle.pacmanandroid.R;
 
 public class BackgroundMusicService extends Service {
     MediaPlayer player;
@@ -15,7 +17,7 @@ public class BackgroundMusicService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        player = MediaPlayer.create(this,R.raw.pacman_song);
+        player = MediaPlayer.create(this, R.raw.pacman_song);
         player.setLooping(true);
         player.setVolume(100,100);
         player.start();

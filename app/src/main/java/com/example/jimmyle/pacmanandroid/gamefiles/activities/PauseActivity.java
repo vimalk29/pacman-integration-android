@@ -1,16 +1,19 @@
-package com.example.jimmyle.pacmanandroid;
+package com.example.jimmyle.pacmanandroid.gamefiles.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.jimmyle.pacmanandroid.R;
+import com.example.jimmyle.pacmanandroid.gamefiles.GameConditions;
+
 public class PauseActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.paused_layout);
-        MainActivity.getPlayer().start();
+        GameActivity.getPlayer().start();
     }
 
     // Method to start activity for Help button
@@ -35,5 +38,10 @@ public class PauseActivity extends Activity {
         startActivity(resumeIntent);
         this.finish();
     }
+    public void showSetting(View view){
+        Intent settingIntent = new Intent(this,SettingsActivity.class);
+        startActivity(settingIntent);
+    }
+
 
 }
